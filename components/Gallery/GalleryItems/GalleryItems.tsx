@@ -5,6 +5,7 @@ import ItemCard from './ItemCard'
 
 // import gallery config
 import galleryConfig from '../../../gallery-config'
+import { ItemId, ItemType } from '../../../features/items/itemsSlice'
 
 export default function GalleryItems() {
     return <GalleryItemsPreview />
@@ -21,18 +22,21 @@ function GalleryItemsPreview() {
 function GalleryItemsHeaderPreview() {
     return (
         <div className="relative border-b-2 mb-[15px]">
-            <GalleryItemsHeaderCollection />
+            <GalleryItemsHeaderCollectionPreview />
         </div>
     )
 }
 
-function GalleryItemsHeaderCollection({ headerCollectionRef, handleEndHidden }) {
-    return <h1 ref={headerCollectionRef} onClick={handleEndHidden} className="text-left text-2xl font-semibold mb-[5px] cursor-pointer">Collection</h1>
+function GalleryItemsHeaderCollectionPreview() {
+    return <h1 className="text-left text-2xl font-semibold mb-[5px]">Collection</h1>
 }
 
 function ItemCardsCollection () {
-    const { items, hiddenItems, pinnedItems, order } = galleryConfig.items
-    
+    const items = galleryConfig.items.items as ItemType[]
+    const hiddenItems = galleryConfig.items.hiddenItems as ItemId[]
+    const pinnedItems = galleryConfig.items.pinnedItems as ItemId[]
+    const order = galleryConfig.items.order as "newest" | "oldest"
+
     // filter out hidden items and pinned items, then create an item card for each remaining item
     const itemCards = items
     .filter(item => !hiddenItems.includes(item.id) && !pinnedItems.includes(item.id))

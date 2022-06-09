@@ -1,9 +1,39 @@
 // import hooks
 import { useContext } from 'react'
+import { Link } from '../../../features/settings/settingsSlice'
 
 import { ProfileContext } from './Profile'
 
-const linkTypes = [
+type LinkType = {
+    id: string
+    label: string
+    display: string
+    location: string 
+    logo: string 
+}
+
+type ProfileLinksPreviewProps = {
+    links: Link[]
+}
+
+type ProfileLinksContentProps = {
+    links: Link[]
+}
+
+type ProfileLinkProps = {
+    link: Link
+}
+
+type ProfileLinkLogoContainerProps = {
+    logo: string
+}
+
+type ProfileLinkLogoProps = {
+    logo: string
+}
+
+
+const linkTypes: LinkType[] = [
     {
         id: "foundation",
         label: "Foundation",
@@ -76,7 +106,7 @@ export default function ProfileLinks() {
     return links.length ? <ProfileLinksPreview links={links} /> : null
 }
 
-function ProfileLinksPreview({ links }) {
+function ProfileLinksPreview({ links }: ProfileLinksPreviewProps) {
     return (
         <div className="grid grid-cols-1 gap-y-2">
             <ProfileLinksTitle />
@@ -87,7 +117,7 @@ function ProfileLinksPreview({ links }) {
 function ProfileLinksTitle() {
     return <h1 className="text-left text-xl font-semibold border-b-[1px] mb-2">Links</h1>
 }
-function ProfileLinksContent({ links }) {
+function ProfileLinksContent({ links }: ProfileLinksContentProps) {
     return (
         <div className="grid grid-cols-1 gap-y-3">
             {
@@ -98,20 +128,20 @@ function ProfileLinksContent({ links }) {
         </div>
     )
 }
-function ProfileLink({ link }) {
+function ProfileLink({ link }: ProfileLinkProps) {
     return (
         <a href={link.location} target="_blank" rel="noreferrer" className="flex gap-x-2 items-center w-fit text-left font-normal px-[15px] py-[5px] whitespace-nowrap rounded-full bg-white shadow-md cursor-pointer transition ease-in-out hover:shadow-lg hover:-translate-y-1">
             {link.logo && <ProfileLinkLogoContainer logo={link.logo} />}{link.display}
         </a>
     )
 }
-function ProfileLinkLogoContainer({ logo }) {
+function ProfileLinkLogoContainer({ logo }: ProfileLinkLogoContainerProps) {
     return (
         <div className="relative flex-inline max-w-[30px] max-h-[18px]  h-full ">
             <ProfileLinkLogo logo={logo} />
         </div>
     )
 }
-function ProfileLinkLogo({ logo }) {
+function ProfileLinkLogo({ logo }: ProfileLinkLogoProps) {
     return <img src={logo} className="h-full object-contain" />
 }

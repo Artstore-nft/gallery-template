@@ -1,9 +1,26 @@
-import { withRouter } from 'next/router'
+import { Router, withRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import galleryConfig from '../../gallery-config'
 
-function Header({ router }) {
+type HeaderProps = {
+    router: Router
+}
+
+type HomeButtonImageContainerProps = {
+    image: string
+}
+
+type HomeButtonImageBoxProps = {
+    image: string
+}
+
+type HomeButtonImageProps = {
+    image: string
+}
+
+function Header({ router }: HeaderProps) {
     const [showHomebutton, setShowHomeButton] = useState(false)
 
     useEffect(() => {
@@ -18,31 +35,40 @@ function Header({ router }) {
     )
 }
 function HomeButton() {
+    const { profile: { image } } = galleryConfig.settings
+    let imageSource: string
+
+    if (image) {
+        imageSource = `/images/${image}`
+    } else {
+        imageSource = null
+    }
+
     return (
         <Link href="/">
             <a className="w-fit h-full flex px-[5px] border-2 rounded-xl">
-                <HomeButtonImageContainer />
+                {imageSource && <HomeButtonImageContainer image={imageSource} />}
                 <HomeButtonTitle />
             </a>
         </Link>
     )
 }
-function HomeButtonImageContainer() {
+function HomeButtonImageContainer({ image }: HomeButtonImageContainerProps) {
     return(
         <div className="w-full h-full p-[3px]">
-            <HomeButtonImageBox />
+            <HomeButtonImageBox image={image} />
         </div>
     )
 }
-function HomeButtonImageBox() {
+function HomeButtonImageBox({ image }: HomeButtonImageBoxProps) {
     return (
         <div className="relative h-full aspect-[1/1] rounded-full  overflow-hidden">
-            <HomeButtonImage />
+            <HomeButtonImage image={image} />
         </div>
     )
 }
-function HomeButtonImage() {
-    return <img src="https://pbs.twimg.com/profile_images/1479035114394845187/cYeg9mSk_400x400.png" layout="fill" />
+function HomeButtonImage({ image }: HomeButtonImageProps) {
+    return <img src={image} className="w-full" />
 }
 function HomeButtonTitle() {
     return <h1 className="grid content-center text-lg px-[5px]">Gallery</h1>

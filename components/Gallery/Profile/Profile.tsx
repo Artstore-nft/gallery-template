@@ -10,11 +10,26 @@ import ProfileBio from './ProfileBio'
 import ProfileLinks from './ProfileLinks'
 
 import galleryConfig from '../../../gallery-config'
+import { ProfileType } from '../../../features/settings/settingsSlice'
 
-export const ProfileContext = createContext()
+type ProfileAddressCopyContainerProps = {
+    isCopied: boolean
+}
+
+type ProfileAddressCopyBoxProps = {
+    isCopied: boolean
+}
+
+interface ProfileContextInterface {
+    profile: ProfileType
+    address: string
+}
+
+export const ProfileContext = createContext<ProfileContextInterface>(null)
 
 export default function Profile() {
-    const { profile, walletAddress } = galleryConfig.settings
+    const profile = galleryConfig.settings.profile as ProfileType
+    const walletAddress = galleryConfig.settings.walletAddress as string
 
     return (
         <ProfileContext.Provider value={{ profile: profile, address: walletAddress}} >
@@ -40,7 +55,7 @@ function ProfileAddress() {
     const { address } = useContext(ProfileContext)
     const [isCopied, setIsCopied] = useState(false)
 
-    const handleCopyAddress = (e) => {
+    const handleCopyAddress = () => {
         navigator.clipboard.writeText(address)
 
         // set isCopied to true
@@ -56,14 +71,14 @@ function ProfileAddress() {
         </button>
     )
 }
-function ProfileAddressCopyContainer({ isCopied }) {
+function ProfileAddressCopyContainer({ isCopied }: ProfileAddressCopyContainerProps) {
     return (
         <div className="flex h-full items-center relative w-[19px]">
             <ProfileAddressCopyBox isCopied={isCopied} />
         </div>
     )
 }
-function ProfileAddressCopyBox({ isCopied }) {
+function ProfileAddressCopyBox({ isCopied }: ProfileAddressCopyBoxProps) {
     if (isCopied) {
         return (
             <div className="relative w-[15px] h-[15px]">
@@ -79,8 +94,8 @@ function ProfileAddressCopyBox({ isCopied }) {
     }
 }
 function ProfileAddressCopyImage() {
-    return <img src="/images/icons/copy.svg" layout="fill" /> 
+    return <img src="/images/icons/copy.svg" className="w-full" /> 
 }
 function ProfileAddressCheckImage() {
-    return <img src="/images/icons/checkMark.svg" layout="fill" />
+    return <img src="/images/icons/checkMark.svg" className="w-full" />
 }
